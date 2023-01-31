@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 
 const useCheckMobile = () => {
-  const [mobile, setMobile] = useState(window.innerWidth <= 576);
+  const [mobile, setMobile] = useState(false);
 
   const handleCheckScreen = () => {
-    if (window.innerWidth <= 576) {
+    if (window.screen.width <= 576 || window.innerWidth <= 576) {
       setMobile(true);
       return;
     }
+
     setMobile(false);
   };
 

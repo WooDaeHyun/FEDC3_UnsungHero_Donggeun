@@ -18,6 +18,7 @@ interface Channel {
 
 interface IProps {
   menuOpen?: boolean;
+  urlPathname?: string;
 }
 
 interface IChannelId {
@@ -26,7 +27,7 @@ interface IChannelId {
   currentId?: string;
 }
 
-const Channels = ({ menuOpen }: IProps) => {
+const Channels = ({ menuOpen, urlPathname }: IProps) => {
   const { data: channelData } = useQuery('channelData', async () => {
     return axios.get(`${END_POINT}/channels`).then(({ data }) => data);
   });
@@ -46,7 +47,7 @@ const Channels = ({ menuOpen }: IProps) => {
   const familyChannel = channelData?.filter((channel: IChannel) => channel.description === '가족');
   const etcChannel = channelData?.filter((channel: IChannel) => channel.description === '기타');
   return (
-    <Wrapper menuOpen={menuOpen}>
+    <Wrapper menuOpen={menuOpen} urlPathname={urlPathname}>
       <EntireViewSidebar>
         <ChannelTitle>
           <GiBatMask className='icon' />
@@ -138,7 +139,8 @@ const Channels = ({ menuOpen }: IProps) => {
 export default Channels;
 
 const Wrapper = styled.div<IProps>`
-  display: flex;
+  display: ${(props) =>
+    props.urlPathname === '/signup' || props.urlPathname === '/login' ? 'none' : 'flex'};
   flex-direction: column;
   height: 100%;
   width: 15rem;
@@ -148,6 +150,7 @@ const Wrapper = styled.div<IProps>`
   gap: 2rem;
   scroll-behavior: smooth;
   @media (max-width: ${({ theme }) => theme.media.moblie}) {
+    display: flex;
     gap: 0;
     background-color: ${({ theme }) => theme.colors.white};
     margin-top: 0;
